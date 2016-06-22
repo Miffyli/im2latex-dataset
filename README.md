@@ -5,6 +5,16 @@ isn't quite enough for this task. I can build bigger sets on request.
 
 **Note: This code is very ad-hoc and requires tinkering with the source**
 
+## Ultimate goals
+- To provide dataset suitable for solving im2latex task
+  - So people can compare performances between systems
+- To provide the tools used to generate said dataset
+  - So people can generate different kind of images (quality, size), different formulas (different fonts), etc
+- Misc tools for handling the datasets
+  - TeX Math tokenizer (possibly)
+  - Performance metric (takes list of true formulas and list of estimated formulas, outputs performance/accuracy)
+  - Tools for modifying the images in wanted way
+
 ## Contents
 
 - `/src/latex2formulas.py`
