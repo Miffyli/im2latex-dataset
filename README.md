@@ -1,6 +1,6 @@
 # im2latex-dataset
 Python tools for creating suitable dataset for OpenAI's im2latex task: https://openai.com/requests-for-research/#im2latex.
-You can download a prebuilt dataset from [here](#). The data is split into train (~84k), validation (~9k) and test (~10k) sets, which possibly
+You can download a prebuilt dataset from [here](https://zenodo.org/record/56198#.V2px0jXT6eA). The data is split into train (~84k), validation (~9k) and test (~10k) sets, which possibly
 isn't quite enough for this task. I can build bigger sets on request.
 
 **Note: This code is very ad-hoc and requires tinkering with the source**
