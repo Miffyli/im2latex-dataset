@@ -37,7 +37,7 @@ isn't quite enough for this task. I can build bigger sets on request.
       - formula_idx is the line number where formula is in `im2latex_formulas.lst`
       - image_name is the name of the image connected to this rendering (without '.png')
       - render_type is the name of render setup used, defined in `formula2image.py`
-  - `im2latex_formulas.lst
+  - `im2latex_formulas.lst`
     - Each line contains one formula
   - `/formula_images` 
     - Directory where images are stored
