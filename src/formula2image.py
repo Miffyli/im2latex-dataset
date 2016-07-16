@@ -111,7 +111,10 @@ def formula_to_image(formula):
             return None
         
         # Turn .pdf to .png
-        code = call((rend_setup[1] % (full_path, full_path)).split(" "), 
+        # Handles variable number of places to insert path.
+        # i.e. "%s.tex" vs "%s.pdf %s.png"
+        full_path_strings = rend_setup[1].count("%")*(full_path,)
+        code = call((rend_setup[1] % full_path_strings).split(" "),
                     stdout=DEVNULL, stderr=DEVNULL)
         
         #Remove files
@@ -138,6 +141,13 @@ def main(formula_list):
     except OSError as e:
         pass #except because throws OSError if dir exists
     print("Turning formulas into images...")
+    
+    # Running a thread pool masks debug output. Uncomment command below to run
+    # formulas over images sequentially to see debug errors more clearly
+    
+    # names = [formula_to_image(formula) for formula in formulas]
+    
+    # Also remember to comment threaded version if you use sequential:
     pool = Pool(THREADS)
     names = list(pool.imap(formula_to_image, formulas))
     
