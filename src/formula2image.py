@@ -141,12 +141,16 @@ def main(formula_list):
     except OSError as e:
         pass #except because throws OSError if dir exists
     print("Turning formulas into images...")
-    pool = Pool(THREADS)
-    names = list(pool.imap(formula_to_image, formulas))
+    
     # Running a thread pool masks debug output. Uncomment command below to run
     # formulas over images sequentially to see debug errors more clearly
+    
     # names = [formula_to_image(formula) for formula in formulas]
-
+    
+    # Also remember to comment threaded version if you use sequential:
+    pool = Pool(THREADS)
+    names = list(pool.imap(formula_to_image, formulas))
+    
     zipped = list(zip(formulas, names))
     
     new_dataset_lines = []
