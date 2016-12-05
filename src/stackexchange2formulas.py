@@ -90,9 +90,6 @@ def main(directory):
         print("Done {} of {}".format(ctr, len(stackexchange_tars)))
         tar.close()
     formulas = list(set(formulas))
-    for formula in formulas: 
-        if "begin{eqnarray*}" in formula:
-            print(formula)
     print("Parsed {} formulas".format(len(formulas)))
     print("Saving formulas...")
     
