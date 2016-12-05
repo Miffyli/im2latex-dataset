@@ -26,7 +26,8 @@ import glob
 import sys
 
 PATTERNS = [r"\\begin\{equation\}(.*?)\\end\{equation\}",
-            r"$$(.*?)$$",
+            r"\$\$(.*?)\$\$",
+            r"\$(.*?)\$",
             r"\\\[(.*?)\\\]",
             r"\\\((.*?)\\\)"]
 DIR = ""
