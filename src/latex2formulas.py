@@ -69,18 +69,6 @@ def main(directory):
     print("Parsed {} formulas".format(len(formulas)))
     print("Saving formulas...")
     
-    """ Leftover just in case removing \n from formulas is bad somehow
-    ctr = 0
-    try:
-        os.mkdir("formulas")
-    except OSError as e:
-        pass #except because throws OSError if dir exists
-    for formula in formulas:
-        with open("formulas/{}".format(ctr), "w") as f:
-            f.write(formula)
-        ctr += 1
-    """
-    
     with open("formulas.txt", "w") as f:
         f.write("\n".join(formulas))
 
