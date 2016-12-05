@@ -43,7 +43,7 @@ def get_formulas(latex):
     for pattern in PATTERNS:
         res = re.findall(pattern, latex, re.DOTALL)
         #Remove short ones
-        res = [x.strip().replace("\n","") for x in res if 
+        res = [x.strip().replace("\n","").replace("\r","") for x in res if 
                MAX_LENGTH > len(x.strip()) > MIN_LENGTH]
         ret.extend(res)
     return ret

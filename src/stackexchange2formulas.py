@@ -43,11 +43,11 @@ def get_formulas(message_body):
     Returns list of formula strings"""
     ret = []
     # Assume math is only inside <p> tags. Need to check this
-    message_body = "\n".join(re.findall("<p>(.*?)</p>", message_body, re.DOTALL))
+    message_body = " ".join(re.findall("<p>(.*?)</p>", message_body, re.DOTALL))
     for pattern in PATTERNS:
         res = re.findall(pattern, message_body, re.DOTALL)
         #Remove short ones
-        res = [x.strip().replace("\n","") for x in res if 
+        res = [x.strip().replace("\n","").replace("\r","") for x in res if 
                MAX_LENGTH > len(x.strip()) > MIN_LENGTH]
         ret.extend(res)
     return ret
@@ -60,7 +60,11 @@ def get_bodies(stackexchange_data):
     for child in xml.getchildren():
         body = child.get("Body")
         if body is not None:
-            bodies.append(html.unescape(child.get("Body")))
+            body = html.unescape(body)
+            # Check if ASCII so we won't get any fancy characters
+            # Code from: stackoverflow.com/questions/196345
+            if all(ord(c) < 128 for c in body):
+                bodies.append(body)
     return bodies
             
 def main(directory):
@@ -86,6 +90,9 @@ def main(directory):
         print("Done {} of {}".format(ctr, len(stackexchange_tars)))
         tar.close()
     formulas = list(set(formulas))
+    for formula in formulas: 
+        if "begin{eqnarray*}" in formula:
+            print(formula)
     print("Parsed {} formulas".format(len(formulas)))
     print("Saving formulas...")
     
