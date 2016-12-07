@@ -55,6 +55,7 @@ DEVNULL = open(os.devnull, "w")
 BASIC_SKELETON = r"""
 \documentclass[12pt]{article}
 \pagestyle{empty}
+\usepackage{amsmath}
 \begin{document}
 
 \begin{displaymath}
