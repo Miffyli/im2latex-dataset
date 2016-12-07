@@ -104,7 +104,7 @@ def formula_to_image(formula):
             f.write(latex)
         
         # Call pdflatex to turn .tex into .pdf
-        code = call(["pdflatex", '-interaction=nonstopmode', full_path+".tex"], 
+        code = call(["pdflatex", '-interaction=nonstopmode', '-halt-on-error', full_path+".tex"],
                     stdout=DEVNULL, stderr=DEVNULL)
         if code != 0:
             os.system("rm -rf "+full_path+"*")
