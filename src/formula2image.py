@@ -91,9 +91,6 @@ def formula_to_image(formula):
     returns list of lists [[image_name, rendering_setup], ...], one list for
     each rendering.
     Return None if couldn't render the formula"""
-    # Change to image dir because textogif doesn't seem to work otherwise...
-    if not IMAGE_DIR in os.getcwd():
-        os.chdir(IMAGE_DIR)
     formula = formula.strip("%")
     name = hashlib.sha1(formula.encode('utf-8')).hexdigest()[:10]
     ret = []
@@ -143,16 +140,22 @@ def main(formula_list):
     except OSError as e:
         pass #except because throws OSError if dir exists
     print("Turning formulas into images...")
-    
-    # Running a thread pool masks debug output. Uncomment command below to run
+
+    # Change to image dir because textogif doesn't seem to work otherwise...
+    oldcwd = os.getcwd()
+    os.chdir(IMAGE_DIR)
+
+    # Running a thread pool masks debug output. Set DEBUG to 1 to run
     # formulas over images sequentially to see debug errors more clearly
+    DEBUG = 0
+    if DEBUG:
+        names = [formula_to_image(formula) for formula in formulas]
+    else:
+        pool = Pool(THREADS)
+        names = list(pool.imap(formula_to_image, formulas))
     
-    # names = [formula_to_image(formula) for formula in formulas]
-    
-    # Also remember to comment threaded version if you use sequential:
-    pool = Pool(THREADS)
-    names = list(pool.imap(formula_to_image, formulas))
-    
+    os.chdir(oldcwd)
+
     zipped = list(zip(formulas, names))
     
     new_dataset_lines = []
