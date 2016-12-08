@@ -38,6 +38,7 @@ Script outputs two lists:
 import glob
 import sys
 import os
+import hashlib
 from multiprocessing import Pool
 from subprocess import call
 
@@ -49,6 +50,10 @@ THREADS = 4
 IMAGE_DIR = "formula_images"
 DATASET_FILE = "im2latex.lst"
 NEW_FORMULA_FILE = "im2latex_formulas.lst"
+
+# Running a thread pool masks debug output. Set DEBUG to 1 to run
+# formulas over images sequentially to see debug errors more clearly
+DEBUG = False
 
 DEVNULL = open(os.devnull, "w")
 
@@ -90,11 +95,8 @@ def formula_to_image(formula):
     returns list of lists [[image_name, rendering_setup], ...], one list for
     each rendering.
     Return None if couldn't render the formula"""
-    # Change to image dir because textogif doesn't seem to work otherwise...
-    if not IMAGE_DIR in os.getcwd():
-        os.chdir(IMAGE_DIR)
     formula = formula.strip("%")
-    name = ("%x" % abs(hash(formula)))[:10] #Hopefully unique enough name
+    name = hashlib.sha1(formula.encode('utf-8')).hexdigest()[:15]
     ret = []
     for rend_name, rend_setup in RENDERING_SETUPS.items():
         # Create latex source
@@ -142,16 +144,23 @@ def main(formula_list):
     except OSError as e:
         pass #except because throws OSError if dir exists
     print("Turning formulas into images...")
+
+    # Change to image dir because textogif doesn't seem to work otherwise...
+    oldcwd = os.getcwd()
+    # Check we are not in image dir yet (avoid exceptions)
+    if not IMAGE_DIR in os.getcwd():
+        os.chdir(IMAGE_DIR)
     
-    # Running a thread pool masks debug output. Uncomment command below to run
-    # formulas over images sequentially to see debug errors more clearly
+    names = None
     
-    # names = [formula_to_image(formula) for formula in formulas]
+    if DEBUG:
+        names = [formula_to_image(formula) for formula in formulas]
+    else:
+        pool = Pool(THREADS)
+        names = list(pool.imap(formula_to_image, formulas))
     
-    # Also remember to comment threaded version if you use sequential:
-    pool = Pool(THREADS)
-    names = list(pool.imap(formula_to_image, formulas))
-    
+    os.chdir(oldcwd)
+
     zipped = list(zip(formulas, names))
     
     new_dataset_lines = []
