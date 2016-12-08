@@ -38,6 +38,7 @@ Script outputs two lists:
 import glob
 import sys
 import os
+import hashlib
 from multiprocessing import Pool
 from subprocess import call
 
@@ -94,7 +95,7 @@ def formula_to_image(formula):
     if not IMAGE_DIR in os.getcwd():
         os.chdir(IMAGE_DIR)
     formula = formula.strip("%")
-    name = ("%x" % abs(hash(formula)))[:10] #Hopefully unique enough name
+    name = hashlib.sha1(formula.encode('utf-8')).hexdigest()[:10]
     ret = []
     for rend_name, rend_setup in RENDERING_SETUPS.items():
         # Create latex source
