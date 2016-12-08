@@ -51,6 +51,10 @@ IMAGE_DIR = "formula_images"
 DATASET_FILE = "im2latex.lst"
 NEW_FORMULA_FILE = "im2latex_formulas.lst"
 
+# Running a thread pool masks debug output. Set DEBUG to 1 to run
+# formulas over images sequentially to see debug errors more clearly
+DEBUG = False
+
 DEVNULL = open(os.devnull, "w")
 
 BASIC_SKELETON = r"""
@@ -92,7 +96,7 @@ def formula_to_image(formula):
     each rendering.
     Return None if couldn't render the formula"""
     formula = formula.strip("%")
-    name = hashlib.sha1(formula.encode('utf-8')).hexdigest()[:10]
+    name = hashlib.sha1(formula.encode('utf-8')).hexdigest()[:15]
     ret = []
     for rend_name, rend_setup in RENDERING_SETUPS.items():
         # Create latex source
@@ -143,11 +147,12 @@ def main(formula_list):
 
     # Change to image dir because textogif doesn't seem to work otherwise...
     oldcwd = os.getcwd()
-    os.chdir(IMAGE_DIR)
-
-    # Running a thread pool masks debug output. Set DEBUG to 1 to run
-    # formulas over images sequentially to see debug errors more clearly
-    DEBUG = 0
+    # Check we are not in image dir yet (avoid exceptions)
+    if not IMAGE_DIR in os.getcwd():
+        os.chdir(IMAGE_DIR)
+    
+    names = None
+    
     if DEBUG:
         names = [formula_to_image(formula) for formula in formulas]
     else:
