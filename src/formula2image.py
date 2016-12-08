@@ -128,9 +128,18 @@ def formula_to_image(formula):
             # already
             return None
         
+        # Detect of convert created multiple images -> multi-page PDF
+        resulted_images = glob.glob(full_path+"-*") 
+        
         if code != 0:
             # Error during rendering, remove files and return None
             os.system("rm -rf "+full_path+"*")
+            return None
+        elif len(resulted_images) > 1:
+            # We have multiple images for same formula
+            # Discard result and remove files
+            for filename in resulted_images:
+                os.system("rm -rf "+filename+"*")
             return None
         else: 
             ret.append([full_path, rend_name])
@@ -195,7 +204,7 @@ def check_validity(dataset_file, formula_file, formula_dir):
         if not splt[1]+".png" in formula_images:
             missing_files += 1
     
-    if int(max_id) != len(formula_file): 
+    if int(max_id)+1 != len(formula_file): 
         print("Max id in dataset != formula_file length (%d vs %d)" % 
               (int(max_id), len(formula_file)))
     
