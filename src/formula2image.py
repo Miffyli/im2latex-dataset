@@ -80,7 +80,8 @@ BASIC_SKELETON = r"""
 
 #RENDERING_SETUPS = {"basic": [BASIC_SKELETON, "./textogif -png -dpi 200 %s"]}
 RENDERING_SETUPS = {"basic": [BASIC_SKELETON, 
-                              "convert -density 200 -quality 100 %s.pdf %s.png"]
+                              "convert -density 200 -quality 100 %s.pdf %s.png",
+                              lambda filename: os.path.isfile(filename + ".png")]
                    }
 
 def remove_temp_files(name):
@@ -99,9 +100,13 @@ def formula_to_image(formula):
     name = hashlib.sha1(formula.encode('utf-8')).hexdigest()[:15]
     ret = []
     for rend_name, rend_setup in RENDERING_SETUPS.items():
+        full_path = name+"_"+rend_name
+        if len(rend_setup) > 2 and rend_setup[2](full_path):
+            print("Skipping, already done: " + full_path)
+            ret.append([full_path, rend_name])
+            continue
         # Create latex source
         latex = rend_setup[0] % formula
-        full_path = name+"_"+rend_name
         # Write latex source
         with open(full_path+".tex", "w") as f:
             f.write(latex)
