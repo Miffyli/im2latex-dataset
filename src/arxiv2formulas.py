@@ -4,7 +4,8 @@
 #  arxiv2formulas.py
 #  Parses arxiv tar files of source files for latex formulas
 #
-#  © Copyright 2016, Anssi "Miffyli" Kanervisto
+#  © Copyright 2017, mitar (https://github.com/mitar)
+#                    Anssi "Miffyli" Kanervisto
 #  
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -80,6 +81,7 @@ def process_tar(file):
 
 def main(directory):
     arxiv_tars = glob.glob(directory+"*.tar")
+    arxiv_tars.extend(glob.glob(directory+"*.tar.gz"))
     formulas = []
     ctr = 0
     for filename in arxiv_tars:
