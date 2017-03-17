@@ -70,10 +70,11 @@ def process_file(tar, file_name):
 
 def process_tar(file):
     formulas = []
+    tar = None
     try:
         tar = tarfile.open(fileobj=file, mode='r:*')
     except:
-        return []
+        print("Error: Couldn't tarfile.open file "+file.name)
     files = tar.getnames()
     for file_name in files:
         formulas.extend(process_file(tar, file_name))
@@ -85,7 +86,7 @@ def main(directory):
     formulas = []
     ctr = 0
     for filename in arxiv_tars:
-        with open(filename, "r") as tar_file:
+        with open(filename, "rb") as tar_file:
             formulas.extend(process_tar(tar_file))
         ctr += 1
         print("Done {} of {}".format(ctr, len(arxiv_tars)))
