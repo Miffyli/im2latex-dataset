@@ -52,7 +52,6 @@ def get_formulas(latex):
 
 def process_file(tar, file_name):
     file_basename, file_extension = os.path.splitext(file_name)
-
     if file_extension == '.pdf':
         return []
     elif file_extension == '.tar':
@@ -74,7 +73,7 @@ def process_tar(file):
     try:
         tar = tarfile.open(fileobj=file, mode='r:*')
     except:
-        print("Error: Couldn't tarfile.open file "+file.name)
+        return []
     files = tar.getnames()
     for file_name in files:
         formulas.extend(process_file(tar, file_name))
@@ -87,7 +86,11 @@ def main(directory):
     ctr = 0
     for filename in arxiv_tars:
         with open(filename, "rb") as tar_file:
-            formulas.extend(process_tar(tar_file))
+            processed_formulas = process_tar(tar_file)
+            if len(processed_formulas) == 0:
+                print("File %s returned 0 formulas. Invalid file?" % filename)
+            else:
+                formulas.extend(processed_formulas)
         ctr += 1
         print("Done {} of {}".format(ctr, len(arxiv_tars)))
     formulas = list(set(formulas))
