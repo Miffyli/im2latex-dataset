@@ -19,6 +19,10 @@ isn't quite enough for this task. I can build bigger sets on request.
 
 - `/src/latex2formulas.py`
   - Script for parsing downloaded latex sources for formulas. Stores formulas in single .txt file (one formula per line)
+- `/src/stackexchange2formulas.py`
+  - Similar to `latex2formulas.py`, but for parsing StackExchange XMLs.
+- `/src/arxiv2formulas.py`
+  - Similar to `latex2formulas.py`, but for parsing arXiv .tar/.tar.gz files (source downloads).
 - `/src/formula2image.py`
   - Creates images and dataset from a file of formulas
 - `/src/im2latex_utils.py`
@@ -64,3 +68,4 @@ isn't quite enough for this task. I can build bigger sets on request.
   - Finish tokenizer function / output list of tokens instead of raw formula in formula list
   - Add accuracy metric (eg. word-error-rate or similar).
     - Check this repository for some evaluation scripts: https://github.com/harvardnlp/im2markup
+  - Combine `...2formula.py` scripts into one, or at least make system more sensible rather than bunch of separate scripts.
