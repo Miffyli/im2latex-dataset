@@ -1,19 +1,9 @@
 # im2latex-dataset
 Python tools for creating suitable dataset for OpenAI's im2latex task: https://openai.com/requests-for-research/#im2latex.
 You can download a prebuilt dataset from [here](https://zenodo.org/record/56198#.V2px0jXT6eA). The data is split into train (~84k), validation (~9k) and test (~10k) sets, which possibly
-isn't quite enough for this task. I can build bigger sets on request.
+isn't quite enough for this task.
 
 **Note: This code is very ad-hoc and requires tinkering with the source**
-
-## Ultimate goals
-- To provide dataset suitable for solving im2latex task
-  - So people can compare performances between systems
-- To provide the tools used to generate said dataset
-  - So people can generate different kind of images (quality, size), different formulas (different fonts), etc
-- Misc tools for handling the datasets
-  - TeX Math tokenizer (possibly)
-  - Performance metric (takes list of true formulas and list of estimated formulas, outputs performance/accuracy)
-  - Tools for modifying the images in wanted way
 
 ## Contents
 
@@ -58,7 +48,7 @@ isn't quite enough for this task. I can build bigger sets on request.
 
 - Sometimes pdflatex gets stuck inside an infinite loop when compiling an image.
   - To fix this you need to manually kill stuck pdflatex processes, otherwise script won't end
-  
+
 ## Issues and possible TODOs
 - If `pdflatex` is used with `convert` this will generate pictures of whole page
     - While this might be a good thing (eg. fixed input size), it might also severly slow down training
@@ -69,3 +59,15 @@ isn't quite enough for this task. I can build bigger sets on request.
   - Add accuracy metric (eg. word-error-rate or similar).
     - Check this repository for some evaluation scripts: https://github.com/harvardnlp/im2markup
   - Combine `...2formula.py` scripts into one, or at least make system more sensible rather than bunch of separate scripts.
+
+
+## Ultimate goals (Update: Likely not going to happen, but kept here as a food for thought)
+- To provide dataset suitable for solving im2latex task
+  - So people can compare performances between systems
+- To provide the tools used to generate said dataset
+  - So people can generate different kind of images (quality, size), different formulas (different fonts), etc
+- Misc tools for handling the datasets
+  - TeX Math tokenizer (possibly)
+  - Performance metric (takes list of true formulas and list of estimated formulas, outputs performance/accuracy)
+  - Tools for modifying the images in wanted way
+
